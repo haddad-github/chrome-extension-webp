@@ -35,6 +35,7 @@ function convertImage(imageUrl, format) {
 
   //Create an element to load the image from URL into memory (allowing for decoding the image) into bitmap
   const img = document.createElement('img');
+  img.crossOrigin = 'anonymous'; //needed to save on pages with multiple images
   img.src = imageUrl;
 
   //Wait for newly initialized image to be fully loaded to execute the function
