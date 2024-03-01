@@ -4,6 +4,9 @@
   "version": "1.0",
   "description": "Gives the option to save WEBP images to JPG/PNG",
   "permissions": ["activeTab", "contextMenus", "downloads", "scripting", "storage"],
+  "host_permissions": [
+    "<all_urls>"
+  ],
   "background": {
     "service_worker": "scripts/background.js"
   },
