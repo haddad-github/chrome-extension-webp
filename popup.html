@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Save as JPG or PNG</title>
+    <style>
+        body {
+            width: 260px;
+            padding: 20px;
+            margin: 0 auto;
+            font-family: 'Arial', sans-serif;
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+        }
+        h1 {
+            font-size: 20px;
+            margin-bottom: 20px;
+        }
+        .option-container {
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+        .option {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        input[type="radio"] {
+            accent-color: #4CAF50;
+            transform: scale(1.5);
+            margin-right: 8px;
+        }
+        label {
+            font-size: 18px;
+            cursor: pointer;
+        }
+        input[type="radio"]:checked + label {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>Save webp images as...</h1>
+    <div class="option-container">
+        <div class="option">
+            <input type="radio" id="jpg" name="format" value="jpg" checked>
+            <label for="jpg">JPG</label>
+        </div>
+        <div class="option">
+            <input type="radio" id="png" name="format" value="png">
+            <label for="png">PNG</label>
+        </div>
+    </div>
+
+    <script src="scripts/popup.js"></script>
+</body>
+</html>
