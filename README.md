@@ -12,11 +12,11 @@ Converts .webp images to either a JPG or PNG upon requesting it and allows you t
 
 ### How it works
 1. Select which format you want to convert .webp images in (that option is saved through every session)
-![img.png](img.png)
+![img.png](ex_img1.png)
 
 
 2. Right-click the image and select "Save Image As..." on the bottom
-![img_1.png](img_1.png)
+![img_1.png](ex_img2.png)
 
 ### Suggestions?
 Open an issue here or leave it as a comment/review on the Chrome extension's page
