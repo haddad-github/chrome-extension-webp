@@ -17,6 +17,8 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
     //..then we extract the data from that key and if it's not found, set it to png by default
     chrome.storage.sync.get('format', (data) => {
       const format = data.format || 'png';
+      console.log(`Background retrieved format: ${format}`);
+
 
       //Script the execute (target is current tab, function is convertImage, args function takes are the URL & format)
       chrome.scripting.executeScript({
@@ -48,8 +50,14 @@ function convertImage(imageUrl, format) {
     const ctx = canvas.getContext('2d');
     ctx.drawImage(this, 0, 0);
 
+    //Verify the selected MIME type
+    let mimeType = `image/${format}`;
+    if (format === 'jpg') {
+      mimeType = 'image/jpeg';
+    }
+
     //Convert the canvas content to the selected format
-    const dataUrl = canvas.toDataURL(`image/${format}`);
+    const dataUrl = canvas.toDataURL(mimeType);
 
     //Create the new filename for the download
     const originalUrl = new URL(imageUrl); //transforms the string into a URL to bypass regex extraction

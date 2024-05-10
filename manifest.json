@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Save WEBP as JPG/PNG",
-  "version": "1.0",
+  "version": "1.1",
   "description": "Gives the option to save WEBP images to JPG/PNG",
   "permissions": ["activeTab", "contextMenus", "downloads", "scripting", "storage"],
   "host_permissions": [
