@@ -48,8 +48,14 @@ function convertImage(imageUrl, format) {
     const ctx = canvas.getContext('2d');
     ctx.drawImage(this, 0, 0);
 
+    //Verify the selected MIME type
+    let mimeType = `image/${format}`;
+    if (format === 'jpg') {
+      mimeType = 'image/jpeg';
+    }
+
     //Convert the canvas content to the selected format
-    const dataUrl = canvas.toDataURL(`image/${format}`);
+    const dataUrl = canvas.toDataURL(mimeType);
 
     //Create the new filename for the download
     const originalUrl = new URL(imageUrl); //transforms the string into a URL to bypass regex extraction
