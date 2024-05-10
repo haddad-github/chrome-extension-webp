@@ -17,8 +17,6 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
     //..then we extract the data from that key and if it's not found, set it to png by default
     chrome.storage.sync.get('format', (data) => {
       const format = data.format || 'png';
-      console.log(`Background retrieved format: ${format}`);
-
 
       //Script the execute (target is current tab, function is convertImage, args function takes are the URL & format)
       chrome.scripting.executeScript({
