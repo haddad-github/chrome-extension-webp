@@ -18,25 +18,46 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
     chrome.storage.sync.get('format', (data) => {
       const format = data.format || 'png';
 
-      //Script the execute (target is current tab, function is convertImage, args function takes are the URL & format)
-      chrome.scripting.executeScript({
-        target: { tabId: tab.id },
-        func: convertImage,
-        args: [info.srcUrl, format]
-
-      });
+      //Fetch the image using the new fetchImage function to handle CORS
+      fetchImage(info.srcUrl, format, tab.id);
     });
   }
 });
 
+//Function to fetch image and cors
+function fetchImage(imageUrl, format, tabId) {
+  //Fetch image from URL and handle CORS
+  //'cors' mode allows for fetching image with CORS headers
+  //convert response to Blob image data
+  fetch(imageUrl, { mode: 'cors' })
+    .then(response => response.blob())
+    .then(blob => {
+
+      //Execute convertImage script..
+      const reader = new FileReader();
+      reader.onload = function() {
+        chrome.scripting.executeScript({
+          target: { tabId: tabId },
+          func: convertImage,
+          args: [reader.result, format, imageUrl]
+        });
+      };
+      //..upon reading blob data completed
+      reader.readAsDataURL(blob);
+    })
+    .catch(error => {
+      console.error("Error fetching image:", error);
+    });
+}
+
 //Function injected into the webpage
 //Note: logs for this function appear in the regular webpage console, not in the Service Worker console
-function convertImage(imageUrl, format) {
+function convertImage(dataUrl, format, originalUrl) {
 
   //Create an element to load the image from URL into memory (allowing for decoding the image) into bitmap
   const img = document.createElement('img');
   img.crossOrigin = 'anonymous'; //needed to save on pages with multiple images
-  img.src = imageUrl;
+  img.src = dataUrl;
 
   //Wait for newly initialized image to be fully loaded to execute the function
   img.onload = function() {
@@ -55,16 +76,16 @@ function convertImage(imageUrl, format) {
     }
 
     //Convert the canvas content to the selected format
-    const dataUrl = canvas.toDataURL(mimeType);
+    const newDataUrl = canvas.toDataURL(mimeType);
 
     //Create the new filename for the download
-    const originalUrl = new URL(imageUrl); //transforms the string into a URL to bypass regex extraction
-    let originalFilename = originalUrl.pathname.split('/').pop();
+    const url = new URL(originalUrl); //use the original URL to extract the filename
+    let originalFilename = url.pathname.split('/').pop();
     originalFilename = originalFilename.substring(0, originalFilename.lastIndexOf('.')) || originalFilename;
     const newFilename = `${originalFilename}.${format}`;
 
     //Send that newly created image & URL as a message to the background script (will be caught in .onMessage listeners)
-    chrome.runtime.sendMessage({dataUrl: dataUrl, filename: newFilename});
+    chrome.runtime.sendMessage({ dataUrl: newDataUrl, filename: newFilename });
   };
 
   //Debugging in case of an error
